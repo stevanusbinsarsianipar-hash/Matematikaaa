@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorium Fungsi Kuadrat</title>
+<style>
+:root{--navy:#17324d;--blue:#2463a6;--teal:#0f8b8d;--gold:#f2b84b;--bg:#f3f7fb;--ink:#203247}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:linear-gradient(120deg,#17324d,#2463a6);color:white;padding:28px 18px;text-align:center}
+header h1{margin:0 0 8px;font-size:clamp(25px,4vw,38px)}
+header p{margin:auto;max-width:780px;color:#e8f1fb}
+nav{position:sticky;top:0;z-index:10;background:#10283e;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:9px}
+nav button{background:transparent;color:white;border:1px solid #55718a;border-radius:20px;padding:8px 13px;cursor:pointer;font-weight:bold}
+nav button.active,nav button:hover{background:var(--gold);color:#172b40}
+main{max-width:1100px;margin:22px auto;padding:0 15px}
+.panel{display:none;background:white;border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:0 5px 20px #17324d12}
+.panel.active{display:block}
+h2{color:var(--navy);margin-top:0}
+h3{color:var(--blue)}
+.lead{font-size:18px;color:#40566b}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.card{border:1px solid #dce6ef;border-radius:13px;padding:16px;background:#fbfdff;margin:10px 0}
+.card strong{color:var(--blue)}
+button.primary{border:0;background:var(--teal);color:white;padding:10px 16px;border-radius:9px;cursor:pointer;font-weight:bold}
+button.primary:hover{filter:brightness(.92)}
+input[type=range]{width:100%;accent-color:var(--teal)}
+input[type=text]{padding:9px;border:1px solid #b9c9d8;border-radius:8px;width:100%;font-size:15px}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
+.control{background:#f4f8fc;padding:12px;border-radius:10px}
+.result{background:#eaf5f5;border-left:4px solid var(--teal);padding:12px;border-radius:8px;margin-top:12px}
+canvas{width:100%;max-width:720px;height:360px;border:1px solid #d5e0e9;border-radius:10px;background:white;display:block;margin:12px auto}
+.question{border:1px solid #dce6ef;border-radius:11px;padding:14px;margin:12px 0}
+.option{display:block;padding:7px;cursor:pointer}
+.feedback{font-weight:bold;margin-top:8px}
+footer{text-align:center;color:#607286;padding:25px}
+.pill{display:inline-block;background:#fff0c9;color:#76520a;padding:4px 10px;border-radius:20px;font-size:13px;font-weight:bold}
+table{border-collapse:collapse;width:100%;margin:12px 0}
+td,th{border:1px solid #d5e0e9;padding:9px;text-align:left}
+th{background:#edf4fa}
+@media(max-width:600px){.panel{padding:16px}nav{justify-content:flex-start}canvas{height:290px}}
+</style>
+</head>
+<body>
+
+<header>
+<span class="pill">MATEMATIKA • FASE E/F</span>
+<h1>Laboratorium Fungsi Kuadrat</h1>
+<p>Jelajahi bentuk parabola, ubah koefisien, temukan titik puncak, dan pecahkan masalah nyata melalui simulasi interaktif.</p>
+</header>
+
+<nav>
+<button class="active" onclick="showPanel('home',this)">Beranda</button>
+<button onclick="showPanel('materi',this)">Materi</button>
+<button onclick="showPanel('lab',this)">Laboratorium</button>
+<button onclick="showPanel('konteks',this)">Kontekstual</button>
+<button onclick="showPanel('kuis',this)">Kuis</button>
+<button onclick="showPanel('hots',this)">Tantangan HOTS</button>
+<button onclick="showPanel('refleksi',this)">Refleksi</button>
+</nav>
+
+<main>
+
+<section id="home" class="panel active">
+<h2>Selamat datang, Penjelajah Parabola!</h2>
+<p class="lead">Pernahkah kamu memperhatikan lintasan bola basket, semburan air mancur, atau bentuk lengkungan jembatan? Banyak fenomena tersebut dapat dimodelkan menggunakan fungsi kuadrat.</p>
+<div class="cards">
+<div class="card"><strong>01 • Pahami</strong><p>Kenali bentuk umum, arah buka parabola, sumbu simetri, dan titik puncak.</p></div>
+<div class="card"><strong>02 • Eksplorasi</strong><p>Geser nilai koefisien a, b, dan c lalu amati perubahan grafik secara langsung.</p></div>
+<div class="card"><strong>03 • Terapkan</strong><p>Gunakan model matematika untuk menyelesaikan masalah nyata.</p></div>
+</div>
+<h3>Tujuan Pembelajaran</h3>
+<ul>
+<li>Menjelaskan karakteristik grafik fungsi kuadrat.</li>
+<li>Menentukan titik puncak, sumbu simetri, dan akar-akar fungsi kuadrat.</li>
+<li>Menganalisis pengaruh koefisien terhadap bentuk grafik.</li>
+<li>Menggunakan fungsi kuadrat untuk memecahkan masalah nyata secara kritis.</li>
+</ul>
+<button class="primary" onclick="showPanel('lab',document.querySelectorAll('nav button')[2])">Mulai Eksplorasi Grafik →</button>
+</section>
+
+<section id="materi" class="panel">
+<h2>Mengenal Fungsi Kuadrat</h2>
+<p>Fungsi kuadrat adalah fungsi yang memiliki pangkat tertinggi variabel 2 dan secara umum ditulis:</p>
+<div class="result" style="text-align:center;font-size:23px"><b>f(x) = ax² + bx + c, dengan a ≠ 0</b></div>
+<ul>
+<li><b>a</b> menentukan arah buka dan tingkat lebar atau sempit parabola.</li>
+<li><b>b</b> bersama a menentukan letak sumbu simetri dan titik puncak.</li>
+<li><b>c</b> menunjukkan titik potong grafik dengan sumbu Y, yaitu (0,c).</li>
+</ul>
+<h3>Unsur Penting Grafik</h3>
+<table>
+<tr><th>Unsur</th><th>Rumus / Makna</th></tr>
+<tr><td>Sumbu simetri</td><td>x = −b/(2a)</td></tr>
+<tr><td>Koordinat titik puncak</td><td>(−b/(2a), f(−b/(2a)))</td></tr>
+<tr><td>Diskriminan</td><td>D = b² − 4ac</td></tr>
+<tr><td>Akar-akar</td><td>x = (−b ± √D)/(2a), jika D ≥ 0</td></tr>
+</table>
+<p><b>Makna diskriminan:</b> D positif berarti grafik memotong sumbu X di dua titik; D nol berarti menyinggung sumbu X; D negatif berarti tidak memotong sumbu X.</p>
+</section>
+
+<section id="lab" class="panel">
+<h2>Laboratorium: Ubah Koefisien, Amati Parabola</h2>
+<p>Geser pengatur di bawah. Perhatikan bagaimana perubahan a, b, dan c memengaruhi grafik fungsi kuadrat.</p>
+<div class="controls">
+<div class="control">
+<label for="a">Koefisien a: <b id="av">1</b></label>
+<input id="a" type="range" min="-3" max="3" step=".25" value="1">
+</div>
+<div class="control">
+<label for="b">Koefisien b: <b id="bv">-4</b></label>
+<input id="b" type="range" min="-8" max="8" step=".5" value="-4">
+</div>
+<div class="control">
+<label for="c">Koefisien c: <b id="cv">3</b></label>
+<input id="c" type="range" min="-8" max="8" step=".5" value="3">
+</div>
+</div>
+<div class="result" id="equation">f(x) = x² − 4x + 3</div>
+<canvas id="graph" width="900" height="460"></canvas>
+<div class="cards">
+<div class="card"><strong>Titik Puncak</strong><div id="vertex">—</div></div>
+<div class="card"><strong>Sumbu Simetri</strong><div id="axis">—</div></div>
+<div class="card"><strong>Diskriminan</strong><div id="disc">—</div></div>
+<div class="card"><strong>Akar-akar</strong><div id="roots">—</div></div>
+<div class="card"><strong>Titik Potong Sumbu Y</strong><div id="intercept">—</div></div>
+<div class="card"><strong>Nilai Ekstrem</strong><div id="extreme">—</div></div>
+</div>
+<p><button class="primary" onclick="resetGraph()">Kembalikan ke Contoh Awal</button></p>
+</section>
+
+<section id="konteks" class="panel">
+<h2>Fungsi Kuadrat dalam Kehidupan</h2>
+
+<div class="card">
+<h3>1. Lemparan Bola Basket</h3>
+<p>Sebuah bola yang dilempar membentuk lintasan dengan model ketinggian h(t) = −t² + 6t + 1, dengan t dalam detik dan h dalam meter.</p>
+<p><b>Pertanyaan:</b> Berapa ketinggian maksimum bola dan kapan ketinggian itu dicapai?</p>
+<button class="primary" onclick="toggleAnswer('ans1')">Lihat Pembahasan</button>
+<div class="result" id="ans1" hidden>Waktu saat puncak adalah t = −6/(2×−1) = 3 detik. Tinggi maksimum h(3) = −9 + 18 + 1 = <b>10 meter</b>.</div>
+</div>
+
+<div class="card">
+<h3>2. Air Mancur</h3>
+<p>Lintasan air mancur dimodelkan oleh h(x) = −0,5x² + 4x + 1. Variabel x menyatakan jarak mendatar (meter), sedangkan h menyatakan tinggi (meter).</p>
+<p><b>Pertanyaan:</b> Tentukan tinggi maksimum semburan air.</p>
+<button class="primary" onclick="toggleAnswer('ans2')">Lihat Pembahasan</button>
+<div class="result" id="ans2" hidden>x puncak = −4/(2×−0,5) = 4. Tinggi maksimum h(4) = −8 + 16 + 1 = <b>9 meter</b>.</div>
+</div>
+
+<div class="card">
+<h3>3. Keuntungan Usaha</h3>
+<p>Keuntungan sebuah usaha dinyatakan P(x) = −2x² + 40x − 100, dengan x menyatakan puluhan produk dan P dalam ratusan ribu rupiah.</p>
+<p><b>Pertanyaan:</b> Berapa jumlah produk yang menghasilkan keuntungan maksimum?</p>
+<button class="primary" onclick="toggleAnswer('ans3')">Lihat Pembahasan</button>
+<div class="result" id="ans3" hidden>x puncak = −40/(2×−2) = 10. Karena x menyatakan puluhan produk, jumlahnya adalah <b>100 produk</b>. Keuntungan maksimum P(10) = 100 satuan, yaitu Rp10.000.000,00.</div>
+</div>
+</section>
+
+<section id="kuis" class="panel">
+<h2>Kuis Pemahaman</h2>
+<p>Pilih satu jawaban paling tepat untuk setiap pertanyaan, lalu tekan Periksa Jawaban.</p>
+<div id="quizArea"></div>
+<button class="primary" onclick="checkQuiz()">Periksa Jawaban</button>
+<div class="result" id="quizResult">Skor akan muncul di sini.</div>
+</section>
+
+<section id="hots" class="panel">
+<h2>Tantangan HOTS: Rancang Air Mancur</h2>
+<p>Sebuah taman ingin membuat air mancur dengan lintasan berbentuk parabola. Model awal lintasan air adalah:</p>
+<div class="result" style="text-align:center"><b>h(x) = −0,25x² + 2x + 1</b></div>
+<ol>
+<li>Tentukan jarak mendatar saat air mencapai tinggi maksimum.</li>
+<li>Tentukan tinggi maksimum air.</li>
+<li>Perancang ingin menaikkan tinggi maksimum menjadi 6 meter tanpa mengubah posisi mendatar titik puncak. Usulkan model fungsi kuadrat baru dengan koefisien a dan b tetap.</li>
+<li>Jelaskan mengapa perubahan konstanta c dapat memenuhi kebutuhan tersebut.</li>
+</ol>
+<button class="primary" onclick="toggleAnswer('hotsAnswer')">Tampilkan Petunjuk dan Pembahasan</button>
+<div class="result" id="hotsAnswer" hidden>
+<b>Pembahasan:</b><br>
+1. x puncak = −2/(2×−0,25) = 4 meter.<br>
+2. h(4) = −0,25(16) + 8 + 1 = 5 meter.<br>
+3. Model baru: h(x) = −0,25x² + 2x + 2. Titik puncaknya (4,6).<br>
+4. Koefisien c menggeser grafik ke atas atau ke bawah tanpa mengubah bentuk dan posisi mendatar titik puncak ketika a dan b tetap.
+</div>
+</section>
+
+<section id="refleksi" class="panel">
+<h2>Refleksi Pembelajaran</h2>
+<p>Isilah refleksi berikut dengan jujur berdasarkan proses belajarmu.</p>
+<label>Nama Peserta Didik</label>
+<input id="studentName" type="text" placeholder="Tuliskan nama">
+<br><br>
+<label>Kelas</label>
+<input id="studentClass" type="text" placeholder="Contoh: X-1">
+<br><br>
+<label>Hal baru yang saya pahami tentang fungsi kuadrat:</label>
+<input id="reflection1" type="text" placeholder="Tuliskan pemahamanmu">
+<br><br>
+<label>Bagian yang masih membingungkan:</label>
+<input id="reflection2" type="text" placeholder="Tuliskan bagian yang perlu dipelajari lagi">
+<br><br>
+<label>Contoh penerapan fungsi kuadrat yang saya temukan:</label>
+<input id="reflection3" type="text" placeholder="Tuliskan contoh">
+<br><br>
+<button class="primary" onclick="printReflection()">Cetak Refleksi</button>
+<p class="result">Gunakan tombol cetak untuk menyimpan refleksi sebagai PDF melalui pilihan printer pada perangkatmu.</p>
+</section>
+
+</main>
+
+<footer>Media Pembelajaran Matematika • Fungsi Kuadrat • Eksplorasi, Penalaran, dan Berpikir Kritis</footer>
+
+<script>
+function showPanel(id,btn){
+document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+if(btn)btn.classList.add('active');
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleAnswer(id){
+const el=document.getElementById(id);
+el.hidden=!el.hidden;
+}
+
+const ids=['a','b','c'];
+ids.forEach(id=>document.getElementById(id).addEventListener('input',drawGraph));
+
+function fmt(n){return Number(n.toFixed(2)).toString()}
+
+function drawGraph(){
+const a=+document.getElementById('a').value;
+const b=+document.getElementById('b').value;
+const c=+document.getElementById('c').value;
+
+document.getElementById('av').textContent=fmt(a);
+document.getElementById('bv').textContent=fmt(b);
+document.getElementById('cv').textContent=fmt(c);
+
+if(a===0){
+document.getElementById('equation').textContent='Nilai a tidak boleh 0 untuk fungsi kuadrat.';
+return;
+}
+
+const f=x=>a*x*x+b*x+c;
+const xv=-b/(2*a);
+const yv=f(xv);
+const D=b*b-4*a*c;
+
+let eq='f(x) = '+fmt(a)+'x² '+(b>=0?'+ ':'− ')+fmt(Math.abs(b))+'x '+(c>=0?'+ ':'− ')+fmt(Math.abs(c));
+document.getElementById('equation').textContent=eq;
+document.getElementById('vertex').textContent='('+fmt(xv)+', '+fmt(yv)+')';
+document.getElementById('axis').textContent='x = '+fmt(xv);
+document.getElementById('disc').textContent=fmt(D)+' ('+(D>0?'dua akar real':D===0?'akar real kembar':'tidak ada akar real')+')';
+document.getElementById('roots').textContent=D>=0?fmt((-b+Math.sqrt(D))/(2*a))+' dan '+fmt((-b-Math.sqrt(D))/(2*a)):'Tidak memotong sumbu X';
+document.getElementById('intercept').textContent='(0, '+fmt(c)+')';
+document.getElementById('extreme').textContent=(a>0?'Minimum: ':'Maksimum: ')+fmt(yv);
+
+const canvas=document.getElementById('graph');
+const ctx=canvas.getContext('2d');
+const W=canvas.width,H=canvas.height;
+const xmin=-10,xmax=10,ymin=-10,ymax=15;
+const X=x=>(x-xmin)/(xmax-xmin)*W;
+const Y=y=>H-(y-ymin)/(ymax-ymin)*H;
+
+ctx.clearRect(0,0,W,H);
+ctx.strokeStyle='#e5edf4';
+ctx.lineWidth=1;
+
+for(let x=-10;x<=10;x++){
+ctx.beginPath();ctx.moveTo(X(x),0);ctx.lineTo(X(x),H);ctx.stroke();
+}
+for(let y=-10;y<=15;y++){
+ctx.beginPath();ctx.moveTo(0,Y(y));ctx.lineTo(W,Y(y));ctx.stroke();
+}
+
+ctx.strokeStyle='#63788c';
+ctx.lineWidth=2;
+ctx.beginPath();
+ctx.moveTo(X(0),0);ctx.lineTo(X(0),H);
+ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));
+ctx.stroke();
+
+ctx.fillStyle='#536a7f';
+ctx.font='14px Arial';
+for(let x=-10;x<=10;x+=2)ctx.fillText(x,X(x)+3,Y(0)+18);
+for(let y=-10;y<=15;y+=5)ctx.fillText(y,X(0)+6,Y(y)-4);
+
+ctx.strokeStyle='#0f8b8d';
+ctx.lineWidth=4;
+ctx.beginPath();
+let started=false;
+for(let px=0;px<=W;px++){
+let x=xmin+px/W*(xmax-xmin);
+let y=f(x);
+if(y<ymin-2||y>ymax+2){started=false;continue;}
+if(!started){ctx.moveTo(px,Y(y));started=true;}
+else ctx.lineTo(px,Y(y));
+}
+ctx.stroke();
+
+if(yv>=ymin&&yv<=ymax&&xv>=xmin&&xv<=xmax){
+ctx.fillStyle='#e29b22';
+ctx.beginPath();
+ctx.arc(X(xv),Y(yv),7,0,Math.PI*2);
+ctx.fill();
+ctx.fillStyle='#17324d';
+ctx.font='bold 15px Arial';
+ctx.fillText('Puncak ('+fmt(xv)+','+fmt(yv)+')',Math.min(X(xv)+12,W-180),Math.max(20,Y(yv)-12));
+}
+}
+
+function resetGraph(){
+document.getElementById('a').value=1;
+document.getElementById('b').value=-4;
+document.getElementById('c').value=3;
+drawGraph();
+}
+drawGraph();
+
+const questions=[
+{q:'Grafik f(x) = 2x² − 8x + 5 terbuka ke arah ....',o:['Atas','Bawah','Kanan','Kiri'],a:0,e:'Koefisien a = 2 bernilai positif sehingga parabola terbuka ke atas.'},
+{q:'Sumbu simetri f(x) = x² − 6x + 8 adalah ....',o:['x = −3','x = 3','x = 6','x = 8'],a:1,e:'x = −b/(2a) = −(−6)/(2) = 3.'},
+{q:'Titik puncak f(x) = −x² + 4x + 1 adalah ....',o:['(2,5)','(−2,5)','(2,1)','(4,1)'],a:0,e:'x puncak = 2 dan f(2) = 5.'},
+{q:'Jika diskriminan suatu fungsi kuadrat negatif, grafik ....',o:['Memotong sumbu X di dua titik','Menyinggung sumbu X','Tidak memotong sumbu X','Selalu terbuka ke atas'],a:2,e:'Diskriminan negatif berarti tidak ada akar real.'},
+{q:'Pada f(x) = 3x² − 2x + 7, titik potong dengan sumbu Y adalah ....',o:['(7,0)','(0,7)','(0,−2)','(3,0)'],a:1,e:'Titik potong sumbu Y diperoleh saat x = 0, sehingga y = c = 7.'}
+];
+
+document.getElementById('quizArea').innerHTML=questions.map((q,i)=>
+'<div class="question"><b>'+(i+1)+'. '+q.q+'</b>'+
+q.o.map((o,j)=>'<label class="option"><input type="radio" name="q'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+o+'</label>').join('')+
+'<div id="fb'+i+'" class="feedback"></div></div>'
+).join('');
+
+function checkQuiz(){
+let score=0;
+questions.forEach((q,i)=>{
+const chosen=document.querySelector('input[name="q'+i+'"]:checked');
+const fb=document.getElementById('fb'+i);
+if(chosen&&+chosen.value===q.a){
+score++;
+fb.style.color='#087b55';
+fb.textContent='Benar. '+q.e;
+}else{
+fb.style.color='#b13a36';
+fb.textContent='Belum tepat. Jawaban: '+String.fromCharCode(65+q.a)+'. '+q.o[q.a]+'. '+q.e;
+}
+});
+document.getElementById('quizResult').textContent='Skor kamu: '+score+'/'+questions.length+' ('+(score/questions.length*100)+'%). '+(score===5?'Hebat!':score>=3?'Terus berlatih!':'Pelajari kembali materi dan coba lagi.');
+}
+
+function printReflection(){
+const fields=['studentName','studentClass','reflection1','reflection2','reflection3'];
+const vals=fields.map(id=>document.getElementById(id).value);
+const w=window.open('','_blank');
+if(!w){alert('Izinkan pop-up untuk mencetak refleksi.');return;}
+w.document.write('<html><head><title>Refleksi Fungsi Kuadrat</title></head><body style="font-family:Arial;padding:30px"><h2>Refleksi Pembelajaran Fungsi Kuadrat</h2><p><b>Nama:</b> '+escapeHTML(vals[0])+'</p><p><b>Kelas:</b> '+escapeHTML(vals[1])+'</p><hr><p><b>Hal baru yang dipahami:</b><br>'+escapeHTML(vals[2])+'</p><p><b>Bagian yang membingungkan:</b><br>'+escapeHTML(vals[3])+'</p><p><b>Contoh penerapan:</b><br>'+escapeHTML(vals[4])+'</p></body></html>');
+w.document.close();
+w.print();
+}
+
+function escapeHTML(s){
+return s.replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+</script>
+</body>
+</html>
